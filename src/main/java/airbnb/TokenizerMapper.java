@@ -9,20 +9,20 @@ import java.io.IOException;
 
 public class TokenizerMapper extends Mapper<Object, Text, Text, IntWritable> {
 
-    private Text asset = new Text();
-    private FloatWritable count = new FloatWritable();
+    private Text city = new Text();
+    private FloatWritable realSum = new FloatWritable();
 
     public void map(Object key, Text value, Mapper.Context context) throws IOException, InterruptedException {
 
         String[] columns = value.toString().split(",");
 
-        if (columns.length == 20) {
-            // Extract the 'magasin' and 'cout' values
-            asset.set(new Text("amsterdam"));
-            count.set(Float.parseFloat(columns[1]));
-            System.out.println(asset);
-            System.out.println(count);
-            context.write(asset, count);
+        if (columns.length == 22) {
+            // Extract the 'city' and 'realSum' values
+            city.set(columns[0]);
+            realSum.set(Float.parseFloat(columns[3]));
+            System.out.println(city);
+            System.out.println(realSum);
+            context.write(city, realSum);
         }
     }
 }
