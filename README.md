@@ -9,6 +9,41 @@
 - The date is from [Kaggle](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities)
 - We're more interested in grouping airbnb prices and show them according to city.
 
+## Screenshots
+
+![proj1](https://github.com/salemhamdani/big-data/assets/78962943/7f54e4a8-ad95-422f-83fe-3e285acc3581)
+![proj2](https://github.com/salemhamdani/big-data/assets/78962943/f1dbb083-e2f7-4779-84b7-45c927b2e573)
+
+## Steps to run
+
+Run the batch:
+docker exec -it hadoop-master bash
+./start-hadoop.sh
+hadoop jar bigData-1.0-SNAPSHOT.jar airbnb.Accommodation input output1
+
+Streaming :
+docker exec -it hadoop-master bash
+./start-hadoop.sh
+./start-kafka-zookeeper.sh
+ kafka-server-start.sh $KAFKA_HOME/config/server.properties & kafka-server-start.sh $KAFKA_HOME/config/server-one.properties & kafka-server-start.sh $KAFKA_HOME/config/server-two.properties &
+
+Producer:
+cd project
+java -cp "$KAFKA_HOME/libs/*":. AirbnbProducer Hello-Kafka airbnb.csv
+
+kafka :
+spark-submit --class spark.kafka.SparkKafkaAccommodation  --master local[2] stream-kafka-spark-1-jar-with-dependencies.jar localhost:2181 test Hello-Kafka 1 >> out
+
+front: 
+cd front-app 
+npm run start
+
+back : 
+cd api 
+npm start
+
+
+
 ## Architecture
 
 ### 1. Data Ingestion:
