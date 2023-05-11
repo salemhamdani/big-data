@@ -9,6 +9,10 @@
 - The date is from [Kaggle](https://www.kaggle.com/datasets/thedevastator/airbnb-prices-in-european-cities)
 - We're more interested in grouping airbnb prices and show them according to city.
 
+## Screenshots
+![proj1](https://github.com/salemhamdani/big-data/assets/78962943/7f54e4a8-ad95-422f-83fe-3e285acc3581)
+![proj2](https://github.com/salemhamdani/big-data/assets/78962943/f1dbb083-e2f7-4779-84b7-45c927b2e573)
+
 ## Architecture
 
 ### 1. Data Ingestion:
