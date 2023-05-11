@@ -1,64 +1,93 @@
 import React from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
 import { Line } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
+import "chartjs-plugin-streaming";
+import moment from "moment";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "Chart.js Line Chart",
-    },
-  },
+const chartColors = {
+  red: "rgb(255, 99, 132)",
+  orange: "rgb(255, 159, 64)",
+  yellow: "rgb(255, 205, 86)",
+  green: "rgb(75, 192, 192)",
+  blue: "rgb(54, 162, 235)",
+  purple: "rgb(153, 102, 255)",
+  grey: "rgb(201, 203, 207)",
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+const Chart = require("react-chartjs-2").Chart;
 
+const color = Chart.helpers.color;
 const data = {
-  labels,
   datasets: [
     {
-      label: "Dataset 1",
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
+      label: "Prices of accommodations in Amesterdam",
+      backgroundColor: color(chartColors.red).alpha(0.5).rgbString(),
+      borderColor: chartColors.red,
+      fill: false,
+      lineTension: 0,
+      borderDash: [8, 4],
+      data: [],
     },
   ],
+};
+
+const options = {
+  elements: {
+    line: {
+      tension: 0.5,
+    },
+  },
+  scales: {
+    xAxes: [
+      {
+        type: "realtime",
+        distribution: "linear",
+        realtime: {
+          onRefresh: async function (chart: any) {
+            const response = await fetch("http://localhost:5000", {
+              method: "Get",
+            });
+            const house = await response.json();
+
+            chart.data.datasets[0].data.push({
+              x: moment(),
+              y: house?.price ?? 200,
+            });
+          },
+          delay: 3000,
+          time: {
+            displayFormat: "h:mm",
+          },
+        },
+        ticks: {
+          displayFormats: 1,
+          maxRotation: 0,
+          minRotation: 0,
+          stepSize: 2,
+          maxTicksLimit: 30,
+          minUnit: "second",
+          source: "auto",
+          autoSkip: true,
+          callback: function (value: moment.MomentInput) {
+            return value ? moment(value, "HH:mm:ss").format("mm:ss") : "---";
+          },
+        },
+      },
+    ],
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+          max: 5000,
+        },
+      },
+    ],
+  },
 };
 
 export default function LinearChart() {
   return (
     <div style={{ width: "100%" }}>
-      <Line options={options} data={data} />
+      <Line data={data} options={options} />
     </div>
   );
 }

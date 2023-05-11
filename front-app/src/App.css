@@ -18,10 +18,11 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  flex-direction: column;
 }
 
-.container {
-  width: 700px;
+.chart-container {
+  width: 60vw;
 }
 
 .App-link {
