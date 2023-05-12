@@ -22,7 +22,6 @@ function App() {
           <Typography variant="h3" sx={{ mt: 10 }}>
             Houses rent list
           </Typography>
-          <AccommodationTable />
         </div>
       </div>
     </div>

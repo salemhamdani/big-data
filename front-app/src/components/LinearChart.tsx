@@ -43,7 +43,7 @@ const options = {
         distribution: "linear",
         realtime: {
           onRefresh: async function (chart: any) {
-            const response = await fetch("http://localhost:5000", {
+            const response = await fetch("http://localhost:5000/find-last", {
               method: "Get",
             });
             const house = await response.json();
